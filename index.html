@@ -1,92 +1,590 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>라틴 피트니스(Zumba) 음악 생성기</title>
-    <style>
-        body { font-family: 'Pretendard', sans-serif; background-color: #121212; color: #f5f5f5; padding: 20px; }
-        .container { max-width: 800px; margin: auto; }
-        .card { background-color: #1e1e1e; padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #333; }
-        h1, h2, h3 { color: #ff5e3a; }
-        button { background-color: #ff5e3a; color: white; border: none; padding: 12px 20px; font-size: 16px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; }
-        button:hover { background-color: #e04e2d; }
-        .box { background-color: #2a2a2a; padding: 15px; border-radius: 8px; margin-bottom: 15px; font-family: monospace; font-size: 14px; color: #00ffcc; white-space: pre-wrap; word-wrap: break-word; }
-        .label { font-size: 12px; color: #aaa; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latin Heat Move Generator — 30 Min Mix Package</title>
+<style>
+  :root{
+    --bg-0:#0a0510;
+    --bg-1:#140a22;
+    --bg-2:#1c1030;
+    --card:#180d28;
+    --border:#33204a;
+    --pink:#ff2e92;
+    --orange:#ff6a00;
+    --gold:#ffd166;
+    --purple:#7b2ff7;
+    --text:#f3eefc;
+    --text-dim:#a99cc2;
+    --mono-bg:#0e081a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 10% 0%, rgba(123,47,247,0.28), transparent 45%),
+      radial-gradient(circle at 90% 0%, rgba(255,46,146,0.18), transparent 40%),
+      radial-gradient(circle at 50% 100%, rgba(255,106,0,0.12), transparent 50%),
+      var(--bg-0);
+    color:var(--text);
+    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",-apple-system,BlinkMacSystemFont,sans-serif;
+    min-height:100vh;
+    padding:32px 16px 80px;
+  }
+  .wrap{max-width:960px;margin:0 auto;}
+  header{text-align:center;margin-bottom:24px;}
+  header h1{
+    font-size:clamp(20px,5vw,28px);
+    margin:0 0 8px;
+    background:linear-gradient(90deg,var(--pink),var(--orange),var(--gold));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    letter-spacing:-0.5px;
+  }
+  header p{color:var(--text-dim);font-size:13.5px;margin:0;line-height:1.6;}
+  .generate-btn{
+    display:block;
+    margin:24px auto 32px;
+    padding:16px 32px;
+    font-size:clamp(15px,4vw,17px);
+    font-weight:700;
+    color:#0a0510;
+    background:linear-gradient(90deg,var(--pink),var(--orange),var(--gold));
+    border:none;
+    border-radius:14px;
+    cursor:pointer;
+    box-shadow:0 8px 24px rgba(255,46,146,0.35);
+    transition:transform .15s ease, box-shadow .15s ease;
+    letter-spacing:-0.3px;
+    width:100%;
+    max-width:420px;
+  }
+  .generate-btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(255,106,0,0.45);}
+  .generate-btn:active{transform:translateY(0);}
+
+  .section-title{
+    font-size:14px;
+    font-weight:700;
+    color:var(--gold);
+    letter-spacing:0.3px;
+    margin:32px 4px 12px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .section-title::before{content:"";flex:0 0 4px;height:16px;background:linear-gradient(180deg,var(--pink),var(--orange));border-radius:4px;}
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:20px 22px;
+    margin-bottom:20px;
+    box-shadow:0 4px 16px rgba(0,0,0,0.35);
+    animation:fadeIn .35s ease;
+  }
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+  .card-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:12px;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  .card-head h2{font-size:15px;margin:0;display:flex;align-items:center;gap:8px;color:var(--text);}
+
+  .track-card-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:14px;
+    gap:10px;
+    flex-wrap:wrap;
+    padding-bottom:12px;
+    border-bottom:1px solid var(--border);
+  }
+  .track-title-group{display:flex;flex-direction:column;gap:4px;}
+  .track-title-group h2{margin:0;font-size:16px;color:var(--text);}
+  .track-role{font-size:12px;color:var(--text-dim);}
+
+  .badge{
+    display:inline-block;
+    font-size:11px;
+    padding:2px 8px;
+    border-radius:20px;
+    background:rgba(255,209,102,0.14);
+    color:var(--gold);
+    border:1px solid rgba(255,209,102,0.3);
+  }
+  .badge.track-num{background:rgba(123,47,247,0.22);color:#c9a2ff;border-color:rgba(123,47,247,0.4);font-weight:700;}
+
+  .copy-btn{
+    flex-shrink:0;
+    padding:8px 14px;
+    font-size:12.5px;
+    font-weight:600;
+    background:var(--bg-2);
+    color:var(--text);
+    border:1px solid var(--border);
+    border-radius:9px;
+    cursor:pointer;
+    transition:background .15s ease, border-color .15s ease, color .15s ease;
+    white-space:nowrap;
+  }
+  .copy-btn:hover{border-color:var(--pink);color:var(--pink);}
+  .copy-btn.copied{background:rgba(255,209,102,0.16);border-color:var(--gold);color:var(--gold);}
+  .copy-btn.all-copy{background:linear-gradient(90deg,var(--pink),var(--orange));color:#0a0510;border:none;font-weight:700;}
+  .copy-btn.small{padding:6px 11px;font-size:11.5px;}
+
+  .field{margin-bottom:14px;}
+  .field:last-child{margin-bottom:0;}
+  .field-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;}
+  .field-label{font-size:12.5px;font-weight:700;color:var(--text-dim);letter-spacing:0.2px;}
+
+  .content{
+    white-space:pre-wrap;
+    word-break:break-word;
+    font-size:13.5px;
+    line-height:1.65;
+    color:var(--text-dim);
+    background:var(--mono-bg);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:14px 16px;
+    max-height:420px;
+    overflow-y:auto;
+    font-family:"SF Mono","Menlo",monospace;
+  }
+  .content.title-text{color:var(--text);font-family:inherit;font-size:16px;font-weight:600;max-height:none;}
+  .content.small-text{color:var(--text);font-family:inherit;font-size:14px;font-weight:600;max-height:none;padding:10px 14px;}
+
+  .empty-state{
+    text-align:center;color:var(--text-dim);padding:60px 20px;
+    border:1px dashed var(--border);border-radius:16px;font-size:14px;
+  }
+  ::-webkit-scrollbar{width:8px;}
+  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:8px;}
+  footer{text-align:center;color:var(--text-dim);font-size:12px;margin-top:30px;}
+  @media (max-width:520px){
+    body{padding:20px 12px 60px;}
+    .card{padding:16px 16px;}
+    .content{font-size:13px;max-height:340px;}
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>🔥 라틴 피트니스 팩토리 (Suno AI)</h1>
-        <p>버튼을 누르면 줌바/피트니스 시장을 타겟팅한 라틴 음악 프롬프트와 유튜브 메타데이터가 자동 생성됩니다. Suno AI에 바로 복붙하세요!</p>
-        
-        <button onclick="generateLatinFitness()">새로운 라틴 피트니스 트랙 생성하기</button>
+<div class="wrap">
+  <header>
+    <h1>🔥 Latin Heat Move Generator</h1>
+    <p>버튼 한 번으로 30분 Latin Dance Cardio Mix용 10트랙 패키지를 생성합니다</p>
+  </header>
 
-        <div id="output" style="display: none; margin-top: 30px;">
-            <div class="card">
-                <h3>🎵 Suno AI 입력용 프롬프트 (Style of Music)</h3>
-                <div class="label">이 텍스트를 Suno의 'Style of Music' 칸에 붙여넣으세요.</div>
-                <div class="box" id="sunoPrompt"></div>
-                
-                <h3>📝 Suno AI 입력용 구조 (Lyrics/Custom Mode)</h3>
-                <div class="label">Suno의 Custom Mode 가사 칸에 붙여넣어 완벽한 운동 기승전결을 만드세요.</div>
-                <div class="box" id="sunoLyrics"></div>
+  <button class="generate-btn" id="generateBtn">새로운 라틴 믹스 생성</button>
 
-                <h3>📺 유튜브 업로드 세팅</h3>
-                <div class="label">유튜브 제목 (SEO 최적화)</div>
-                <div class="box" id="ytTitle"></div>
-                
-                <div class="label">비주얼 컨셉 (배경 영상 검색용 키워드)</div>
-                <div class="box" id="bgConcept"></div>
-            </div>
-        </div>
-    </div>
+  <div id="emptyState" class="empty-state">아직 생성된 믹스가 없어요. 위 버튼을 눌러 10트랙 패키지를 만들어보세요 💃</div>
 
-    <script>
-        const genres = [
-            { 
-                type: '레게톤 (Night-Drive / Cardio)', 
-                prompt: '100 BPM, intense reggaeton, heavy deep bass, driving dembow rhythm, female spanish vocal, energetic workout anthem, high energy drop, night drive vibe',
-                title: '🔥 100 BPM Reggaeton Night Drive | Deep Bass Workout Mix 2026',
-                bg: '마이애미 해변 야간 드라이브 루프, 네온사인 터널 주행 (Pexels 검색어: Neon driving loop, Night city drive)'
-            },
-            { 
-                type: '살사 & 바차타 (Zumba Dance)', 
-                prompt: '125 BPM, fast energetic salsa, heavy brass section, piano montuno, intense latin percussion, upbeat zumba dance beat, instrumental, no vocals',
-                title: '💃 125 BPM Salsa Zumba Fitness | Heavy Brass & Piano Dance Workout',
-                bg: '역동적인 네온 피트니스 스튜디오, 리듬감 있는 추상적 파티클 (Pexels 검색어: Abstract neon dance loop, Fitness gym lights)'
-            },
-            { 
-                type: '라틴 팝 (Duet Garage Pop)', 
-                prompt: '115 BPM, catchy latin pop, upbeat garage house rhythm, male and female duet vocals, english chorus, spanish verses, summer party vibe',
-                title: '🌴 115 BPM Latin Pop Workout | Duet Garage House Mix for Cardio',
-                bg: '해변가 야외 라운지 파티 루프, 노을 지는 야외 수영장 (Pexels 검색어: Sunset beach lounge loop, Pool party)'
-            },
-            {
-                type: '하드 라틴 트랩 (Heavy Lifting)',
-                prompt: '90 BPM, dark latin trap, heavy 808 sub bass, aggressive brass, male spanish rap, hard hitting beat, gym motivation, heavy lifting',
-                title: '🦍 90 BPM Dark Latin Trap | Heavy 808 Gym Motivation & Lifting',
-                bg: '어둡고 거친 크로스핏 체육관, 붉은 조명 (Pexels 검색어: Dark gym lights, Red neon abstract loop)'
-            }
-        ];
+  <div id="overallSection"></div>
+  <div id="trackSection"></div>
 
-        const structures = [
-            "[Intro] (0:00-0:30)\nSlow reggaeton build up, atmospheric synths\n\n[Verse 1] (0:30-1:00)\nFemale vocals start with heavy bass\n\n[Pre-Chorus] (1:00-1:15)\nTempo rises, snare roll!\n\n[Chorus - Drop] (1:15-1:45)\nMaximum energy Latin trap beat! Heavy 808!\n\n[Verse 2] (1:45-2:15)\nFast rap flow, aggressive gym motivation\n\n[Chorus - Drop] (2:15-2:45)\nMassive energy return!\n\n[Dance Break / Brass Solo] (2:45-3:15)\nIntense salsa brass and percussion solo (Instrumental)\n\n[Bridge] (3:15-3:45)\nBuilding up tension one last time\n\n[Final Drop] (3:45-4:15)\nExplosive finale! Max BPM!\n\n[Outro]\nFading out slowly",
-            
-            "[Intro] (0:00-0:30)\nPiano montuno, light percussion\n\n[Verse 1]\n(Spanish vocals)\n\n[Chorus] (English)\n\n[Dance Break 1] (Brass section solo)\n\n[Verse 2]\n\n[Chorus] (English)\n\n[Extended Percussion Solo]\n(Long instrumental cardio break)\n\n[Bridge]\n\n[Chorus]\n\n[Epic Final Drop]\nExplosive latin percussion!\n\n[Outro]"
-        ];
+  <footer>Suno AI &amp; Midjourney 프롬프트는 직접 각 사이트에 붙여넣어 사용하세요.</footer>
+</div>
 
-        function generateLatinFitness() {
-            const genre = genres[Math.floor(Math.random() * genres.length)];
-            const structure = structures[Math.floor(Math.random() * structures.length)];
+<script>
+(function(){
 
-            document.getElementById('sunoPrompt').innerText = genre.prompt;
-            document.getElementById('sunoLyrics').innerText = structure;
-            document.getElementById('ytTitle').innerText = genre.title;
-            document.getElementById('bgConcept').innerText = genre.bg;
+  // ---------- helpers ----------
+  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  function pickN(arr, n){
+    const copy = [...arr];
+    for(let i=copy.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [copy[i],copy[j]]=[copy[j],copy[i]];
+    }
+    return copy.slice(0,n);
+  }
+  function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+  function el(tag, className){ const e=document.createElement(tag); if(className) e.className=className; return e; }
 
-            document.getElementById('output').style.display = 'block';
-        }
-    </script>
+  // ---------- copy store (event delegation) ----------
+  let copyStore = {};
+
+  function copyText(text, btn){
+    const original = btn.dataset.originalLabel || btn.textContent;
+    btn.dataset.originalLabel = original;
+    const done = ()=>{
+      btn.textContent = '복사 완료';
+      btn.classList.add('copied');
+      setTimeout(()=>{
+        btn.textContent = original;
+        btn.classList.remove('copied');
+      }, 1500);
+    };
+    if(navigator.clipboard && window.isSecureContext){
+      navigator.clipboard.writeText(text).then(done).catch(()=>fallbackCopy(text, done));
+    } else {
+      fallbackCopy(text, done);
+    }
+  }
+  function fallbackCopy(text, done){
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try{ document.execCommand('copy'); done(); }catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  document.body.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.copy-btn');
+    if(!btn) return;
+    const key = btn.dataset.copyId;
+    if(key==null || !(key in copyStore)) return;
+    copyText(copyStore[key], btn);
+  });
+
+  // ---------- fixed track specs (order & role are FIXED, not random) ----------
+  const trackSpecs = [
+    { num:1,  baseConcept:'Sunset Warm Up',     genreOptions:['Bachata Pop','Latin Pop'],        bpmRange:[95,100],  role:'워밍업 (Warm Up)',        energy:'low',
+      visual:'Photorealistic cinematic 4K still of a couple dancing slowly in silhouette on a Cancún beach at sunset, warm gold and orange sky, gentle ocean waves, tender romantic mood' },
+    { num:2,  baseConcept:'Salsa Heat',          genreOptions:['Salsa'],                          bpmRange:[120,124], role:'본격 진입 (Build Up)',     energy:'mid',
+      visual:'Photorealistic cinematic 4K still of a lively night street in Mexico City strung with warm string lights, a crowd of people dancing salsa on a cobblestone street' },
+    { num:3,  baseConcept:'Baila Conmigo',       genreOptions:['Reggaeton','Latin Dance Cardio'], bpmRange:[124,128], role:'운동 강도 상승 (Intensify)', energy:'high',
+      visual:'Photorealistic cinematic 4K still of a neon-lit fitness studio, a woman leading an energetic Latin dance cardio workout session, vibrant neon glow' },
+    { num:4,  baseConcept:'Bachata Night',       genreOptions:['Bachata Pop'],                    bpmRange:[105,112], role:'중간 호흡 조절 (Breather)', energy:'low',
+      visual:'Photorealistic cinematic 4K still of a romantic Mexican street at night, a couple dancing close together in warm ambient light' },
+    { num:5,  baseConcept:'Miami Fire',          genreOptions:['Latin Trap','Reggaeton'],         bpmRange:[126,130], role:'재상승 (Re-Ignite)',       energy:'high',
+      visual:'Photorealistic cinematic 4K still of a luxurious Miami beach club party at night, tall palm trees, vibrant party lighting, a crowd dancing passionately' },
+    { num:6,  baseConcept:'Corazón Flow',        genreOptions:['Salsa','Latin Pop'],              bpmRange:[122,126], role:'리듬 유지 (Maintain)',     energy:'mid',
+      visual:'Photorealistic cinematic 4K still of a salsa couple dancing on a warm neon-lit street, onlookers enjoying the night' },
+    { num:7,  baseConcept:'Tropical Burn',       genreOptions:['Latin Dance Cardio','Reggaeton'], bpmRange:[128,132], role:'칼로리 소모 구간 (Burn)',   energy:'high',
+      visual:'Photorealistic cinematic 4K still of a small group Latin dance cardio fitness session under tropical lighting, energetic synchronized movement' },
+    { num:8,  baseConcept:'Cancun Fever',        genreOptions:['Latin Trap','Salsa Fusion'],      bpmRange:[135,140], role:'최고 강도 진입 (Peak Entry)', energy:'high',
+      visual:'Photorealistic cinematic 4K still of a beach party in Cancún at night, bright dynamic lights, a large dancing crowd celebrating' },
+    { num:9,  baseConcept:'Final Heat',          genreOptions:['Reggaeton','Latin Club'],         bpmRange:[140,145], role:'마지막 피크 (Final Peak)',  energy:'high',
+      visual:'Photorealistic cinematic 4K still of a high-energy Miami beach club, intense neon lighting, a crowd in a peak dance cardio moment' },
+    { num:10, baseConcept:'Moonlight Cooldown',  genreOptions:['Bachata','Latin Acoustic Pop'],   bpmRange:[90,100],  role:'쿨다운 (Cooldown)',        energy:'low',
+      visual:'Photorealistic cinematic 4K still of a quiet moonlit ocean shore, a couple dancing slowly together under the moonlight' }
+  ];
+
+  const genreInstruments = {
+    'Bachata Pop':'romantic bachata guitar arpeggios, bongos, güira, warm bass, pop chorus structure',
+    'Latin Pop':'uplifting latin pop synths, acoustic guitar accents, light percussion, radio-friendly hook',
+    'Salsa':'latin brass, congas, bongos, piano montuno, upright bass',
+    'Reggaeton':'dembow rhythm, deep 808 bass, tropical percussion, urban synths',
+    'Latin Dance Cardio':'tropical percussion, latin brass, congas, bongos, uplifting synths, cardio-driven energetic groove',
+    'Latin Trap':'trap hi-hats, rolling 808 bass, dembow-trap fusion percussion, moody synths',
+    'Salsa Fusion':'salsa brass fused with trap 808s, congas, modern hybrid production',
+    'Latin Club':'club-ready synths, deep bass, reggaeton-house fusion percussion, festival energy',
+    'Bachata':'romantic bachata guitar arpeggios, bongos, güira, warm bass',
+    'Latin Acoustic Pop':'acoustic guitar, soft percussion, warm strings, intimate vocals'
+  };
+
+  const energyLabelMap = {
+    low:'slow, romantic, intimate warm-up/cooldown energy',
+    mid:'steady, confident mid-tempo groove',
+    high:'high-intensity, explosive peak cardio energy'
+  };
+
+  const styleElements = [
+    'tropical percussion','latin brass','congas','bongos','dembow rhythm',
+    'romantic male and female vocals','energetic dance groove','summer night party','beach club atmosphere'
+  ];
+
+  const titleVariantSuffixes = ['', ' (Extended Mix)', ' - Dance Edit', ' (Radio Edit)', ' - Cardio Mix'];
+
+  const mjAngleDetails = [
+    'wide-angle establishing shot','close-up dance moment','medium shot capturing full silhouette','low angle dramatic composition'
+  ];
+  const mjStyleSuffix = 'Photorealistic, cinematic, 4K, realistic lighting, premium music video still, tropical neon glow, warm summer night, elegant latin dance energy, clean composition, no real logos, no readable text, no brand names, no nudity, no explicit content, 16:9';
+
+  // ---------- shared lyric line pools (elegant, non-explicit) ----------
+  const introLines = [
+    "La noche cae sobre la playa, el calor nos envuelve...",
+    "Las luces de neón brillan en la calle empedrada...",
+    "El viento del mar trae un perfume de deseo...",
+    "Bajo la luna, la ciudad se enciende de ritmo..."
+  ];
+  const verseLines = [
+    "Tu mirada cruza la mía entre luces doradas,",
+    "El ritmo nos une bajo el cielo de verano,",
+    "Cada paso que damos enciende la noche,",
+    "Tu sonrisa brilla como el mar bajo la luna,",
+    "Nos movemos despacio, el mundo desaparece,",
+    "Elegante y ardiente, así es esta noche,",
+    "La música nos lleva, no hay vuelta atrás,",
+    "Feel the rhythm rise, dance with me tonight."
+  ];
+  const preChorusLines = [
+    "Ven más cerca, siente el ritmo en tu piel,",
+    "No hay palabras, solo el baile nos habla,",
+    "El corazón late al compás de esta noche,"
+  ];
+  const chorusLines = [
+    "Baila conmigo, mi amor, bajo este cielo de fuego,",
+    "Corazón, corazón, late al ritmo del mar,",
+    "Mi amor, no pares, sigue el compás conmigo,",
+    "Baila conmigo esta noche, corazón, hasta el amanecer."
+  ];
+  const bridgeLines = [
+    "Somos fuego y mar, somos ritmo y piel,",
+    "En esta calle de ensueño, el mundo se detiene,",
+    "Solo existes tú, mi amor, bajo este cielo,"
+  ];
+  const outroLines = [
+    "Y así, bajo las estrellas, el ritmo se queda con nosotros...",
+    "La noche termina, pero el corazón sigue bailando...",
+    "Baila conmigo, corazón, hasta que salga el sol..."
+  ];
+
+  // ---------- energy-specific ambience/instrumental notes ----------
+  const energyPools = {
+    low: {
+      intro: ['(soft acoustic guitar, gentle waves, intimate whispered vocals)','(slow warm percussion fade-in, calm night breeze)'],
+      dance: ['(soft instrumental sway, gentle guitar phrase, relaxed groove)','(light percussion roll, warm brass whisper, slow tempo hold)'],
+      percussionBreak: ['(soft congas and bongos exchange a gentle rhythm)','(light percussion pulse, warm and unhurried)'],
+      extendedSolo: ['(tender guitar solo, soft strings underneath, romantic build)','(gentle piano and guitar duet, intimate and warm)'],
+      finalDrop: ['(gentle final swell — warm strings and soft percussion settle)','(soft rhythmic close, tender vocal ad-lib fades in)'],
+      outro: ['(fade out with soft waves and warm acoustic strum)','(quiet fade, gentle night breeze lingers)']
+    },
+    mid: {
+      intro: ['(soft percussion fade-in, night ambience, sensual whisper vocals)','(warm brass swell, street ambience, rising energy)'],
+      dance: ['(instrumental groove — congas and brass rise, crowd energy builds)','(percussion lift — bongos and dembow rhythm intensify)'],
+      percussionBreak: ['(congas, bongos and timbales trade steady rhythms)','(warm percussion jam, brass accents layered in)'],
+      extendedSolo: ['(extended brass and piano solo, warm cinematic build)','(guitar and synth solo trading melodic phrases)'],
+      finalDrop: ['(final drop — full band hits together, crowd energy peaks)','(big beat drop — bass and percussion peak in unison)'],
+      outro: ['(fade out with percussion and ocean breeze ambience)','(warm fade, distant brass echoes into the night)']
+    },
+    high: {
+      intro: ['(driving percussion hit, crowd cheer, high-energy synth stab)','(big bass drop intro, pulsing lights, crowd chanting)'],
+      dance: ['(intense drum break, crowd hype chants, explosive energy)','(hard-hitting bass stab, strobing lights, crowd roar)'],
+      percussionBreak: ['(high-speed conga and 808 battle, relentless energy)','(rapid percussion barrage, crowd chanting along)'],
+      extendedSolo: ['(explosive brass and synth solo, tension racing to the peak)','(blistering guitar and percussion solo, unstoppable momentum)'],
+      finalDrop: ['(massive final drop — full crowd explosion, peak intensity)','(huge bass and horn hit together, climactic peak)'],
+      outro: ['(hard cut to a triumphant final hit, crowd cheering fades)','(energetic fade with crowd chants echoing)']
+    }
+  };
+
+  function buildLyrics(spec, genreLabel, bpm, songTitle){
+    const p = energyPools[spec.energy];
+    const introAmbience = pick(p.intro);
+    const danceAmbience = pick(p.dance);
+    const percAmbience = pick(p.percussionBreak);
+    const soloAmbience = pick(p.extendedSolo);
+    const dropAmbience = pick(p.finalDrop);
+    const outroAmbience = pick(p.outro);
+
+    const introLine = pick(introLines);
+    const v1 = pickN(verseLines,3).join('\n');
+    const pre1 = pick(preChorusLines);
+    const cho = pickN(chorusLines,3).join('\n');
+    const v2 = pickN(verseLines,3).join('\n');
+    const cho2 = pickN(chorusLines,3).join('\n');
+    const bridge = pickN(bridgeLines,2).join('\n');
+    const outroLine = pick(outroLines);
+
+    return `[Working Title: "${songTitle}" | Role: ${spec.role} | Genre: ${genreLabel} | Tempo: ${bpm} BPM]
+[Structured timeline 0:00–4:25, arranged to naturally build toward a ~3:30–4:15 runtime]
+
+[Intro | 0:00-0:20]
+${introAmbience}
+${introLine}
+
+[Verse 1 | 0:20-0:50]
+${v1}
+
+[Pre-Chorus | 0:50-1:05]
+${pre1}
+Siénteme cerca, no me sueltes más.
+
+[Chorus | 1:05-1:35]
+${cho}
+
+[Dance Break | 1:35-1:55]
+${danceAmbience}
+
+[Verse 2 | 1:55-2:25]
+${v2}
+
+[Chorus | 2:25-2:55]
+${cho2}
+
+[Percussion Break | 2:55-3:15]
+${percAmbience}
+
+[Extended Solo | 3:15-3:40]
+${soloAmbience}
+
+[Bridge | 3:40-3:55]
+${bridge}
+
+[Final Drop | 3:55-4:10]
+${dropAmbience}
+
+[Outro | 4:10-4:25]
+${outroAmbience}
+${outroLine}`;
+  }
+
+  // ---------- overall mix metadata ----------
+  const titleEmojis = ['🔥','💃','🌴','✨','🌙','🕺'];
+  const overallTitleTemplates = [
+    (e)=>`${e} 30-Minute Latin Dance Cardio Mix | Salsa, Bachata & Reggaeton Workout | 4K Party BGM`,
+    (e)=>`${e} Full Latin Dance Cardio Session | 30 Min Salsa Bachata Reggaeton Mix`,
+    (e)=>`${e} 30 Min Latin Party Workout | Salsa to Reggaeton Dance Cardio Mix`,
+    (e)=>`${e} Latin Dance Cardio Journey | 30-Minute Salsa Bachata Reggaeton Mix`,
+    (e)=>`${e} 90–145 BPM Latin Dance Cardio Mix | 30 Minute Salsa Bachata Reggaeton Workout`
+  ];
+
+  const overallTagPool = [
+    'latin dance cardio','salsa workout','bachata workout','latin fitness music',
+    'dance cardio','baile latino','cardio latino','reggaeton workout','tropical workout mix',
+    '30 minute latin workout','full latin dance cardio mix','salsa bachata reggaeton mix',
+    'latin party mix','zumba-inspired workout','warm up to cooldown workout',
+    'latin trap fitness','no copyright latin music','4k workout background music',
+    'home dance workout','miami beach workout music','mexico city night mix'
+  ];
+
+  function buildOverallTitle(){ return pick(overallTitleTemplates)(pick(titleEmojis)); }
+
+  function buildOverallDescription(){
+    const emoji = pick(titleEmojis);
+    const journey = trackSpecs.map(t=>t.baseConcept).join(' → ');
+    return `Welcome to Latin Heat Move ${emoji} — this is a full 30-minute Latin Dance Cardio journey across 10 tracks, taking you from a slow sunset warm-up all the way to a high-energy peak, then back down to a calm moonlit cooldown.
+
+🎵 The journey: ${journey}.
+
+Blending salsa, bachata, reggaeton, latin trap and latin pop rhythms, this mix is built for baile latino, cardio latino, HIIT, and Zumba-inspired dance sessions — sin parar, sin excusas.
+
+🎧 Great for: home workout, full-length dance cardio sessions, salsa workout, bachata workout, and summer night party vibes.
+
+Music generated with AI. Commercial license on file. Visuals generated with AI and edited for original video production.
+
+🔔 Subscribe to Latin Heat Move for weekly 30-minute Latin Dance Cardio mixes.
+#LatinDanceCardio #SalsaWorkout #BachataWorkout`;
+  }
+
+  function buildOverallTags(){ return pickN(overallTagPool, 15).join(', '); }
+
+  // ---------- per-track builder ----------
+  function buildTrack(spec){
+    const genre = pick(spec.genreOptions);
+    const bpm = randInt(spec.bpmRange[0], spec.bpmRange[1]);
+    const songTitle = spec.baseConcept + pick(titleVariantSuffixes);
+    const instruments = genreInstruments[genre];
+    const pickedElements = pickN(styleElements, 4);
+    const styleText = `${bpm} BPM, ${genre}, ${instruments}, featuring ${pickedElements.join(', ')}, ${energyLabelMap[spec.energy]}, designed for a commercial YouTube Latin Dance Cardio workout playlist, original melody, no sampling, no copyrighted artist reference.`;
+    const lyrics = buildLyrics(spec, genre, bpm, songTitle);
+    const mj = `${spec.visual}, ${pick(mjAngleDetails)}, ${mjStyleSuffix} --ar 16:9 --style raw --v 6`;
+    return { num:spec.num, role:spec.role, songTitle, bpm, genre, styleText, lyrics, mj };
+  }
+
+  // ---------- DOM builders ----------
+  function makeOverallCard(label, badge, text, copyId){
+    const card = el('div','card');
+    const head = el('div','card-head');
+    const h2 = el('h2'); h2.textContent = label;
+    const badgeEl = el('span','badge'); badgeEl.textContent = badge;
+    h2.appendChild(badgeEl);
+    const btn = el('button','copy-btn'); btn.textContent = '복사하기'; btn.dataset.copyId = copyId;
+    head.appendChild(h2); head.appendChild(btn);
+    const content = el('div', badge==='TITLE' ? 'content title-text' : 'content');
+    content.textContent = text;
+    card.appendChild(head); card.appendChild(content);
+    copyStore[copyId] = text;
+    return card;
+  }
+
+  function makeField(label, text, copyId){
+    const wrap = el('div','field');
+    const head = el('div','field-head');
+    const lbl = el('span','field-label'); lbl.textContent = label;
+    const btn = el('button','copy-btn small'); btn.textContent = '복사하기'; btn.dataset.copyId = copyId;
+    head.appendChild(lbl); head.appendChild(btn);
+    const isShort = label==='곡명' || label==='BPM' || label==='장르';
+    const content = el('div', isShort ? 'content small-text' : 'content');
+    content.textContent = text;
+    wrap.appendChild(head); wrap.appendChild(content);
+    copyStore[copyId] = text;
+    return wrap;
+  }
+
+  function makeTrackCard(t){
+    const card = el('div','card');
+    const head = el('div','track-card-head');
+
+    const titleGroup = el('div','track-title-group');
+    const h2 = el('h2');
+    const numBadge = el('span','badge track-num');
+    numBadge.textContent = `TRACK ${String(t.num).padStart(2,'0')}`;
+    h2.appendChild(numBadge);
+    h2.appendChild(document.createTextNode(' ' + t.songTitle));
+    const roleEl = el('div','track-role'); roleEl.textContent = `역할: ${t.role}`;
+    titleGroup.appendChild(h2); titleGroup.appendChild(roleEl);
+
+    const allCopyId = `t${t.num}-all`;
+    const allBtn = el('button','copy-btn all-copy'); allBtn.textContent = '이 트랙 전체 복사'; allBtn.dataset.copyId = allCopyId;
+
+    head.appendChild(titleGroup); head.appendChild(allBtn);
+    card.appendChild(head);
+
+    card.appendChild(makeField('곡명', t.songTitle, `t${t.num}-title`));
+    card.appendChild(makeField('BPM', String(t.bpm), `t${t.num}-bpm`));
+    card.appendChild(makeField('장르', t.genre, `t${t.num}-genre`));
+    card.appendChild(makeField('Suno AI Style Prompt', t.styleText, `t${t.num}-style`));
+    card.appendChild(makeField('Suno AI Lyrics', t.lyrics, `t${t.num}-lyrics`));
+    card.appendChild(makeField('Midjourney Prompt', t.mj, `t${t.num}-mj`));
+
+    const allText = `[TRACK ${String(t.num).padStart(2,'0')} — ${t.role}]
+곡명: ${t.songTitle}
+BPM: ${t.bpm}
+장르: ${t.genre}
+
+Suno AI Style Prompt:
+${t.styleText}
+
+Suno AI Lyrics:
+${t.lyrics}
+
+Midjourney Prompt:
+${t.mj}`;
+    copyStore[allCopyId] = allText;
+
+    return card;
+  }
+
+  // ---------- generate ----------
+  function generate(){
+    copyStore = {};
+    const overallSection = document.getElementById('overallSection');
+    const trackSection = document.getElementById('trackSection');
+    overallSection.innerHTML = '';
+    trackSection.innerHTML = '';
+
+    const overallTitleEl = el('div','section-title'); overallTitleEl.textContent = '전체 믹스 메타데이터';
+    overallSection.appendChild(overallTitleEl);
+    overallSection.appendChild(makeOverallCard('유튜브 제목 (전체 믹스)', 'TITLE', buildOverallTitle(), 'overall-title'));
+    overallSection.appendChild(makeOverallCard('유튜브 설명 (전체 믹스)', 'DESCRIPTION', buildOverallDescription(), 'overall-desc'));
+    overallSection.appendChild(makeOverallCard('유튜브 태그 (전체 믹스)', 'TAGS', buildOverallTags(), 'overall-tags'));
+
+    const trackTitleEl = el('div','section-title'); trackTitleEl.textContent = '트랙 패키지 (Track 01–10)';
+    trackSection.appendChild(trackTitleEl);
+    trackSpecs.forEach(spec=>{
+      const trackData = buildTrack(spec);
+      trackSection.appendChild(makeTrackCard(trackData));
+    });
+
+    document.getElementById('emptyState').style.display = 'none';
+  }
+
+  document.getElementById('generateBtn').addEventListener('click', generate);
+
+})();
+</script>
 </body>
 </html>
